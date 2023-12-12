@@ -14,7 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     document.getElementById('encryptButton').addEventListener('click', encryptMessage);
     document.getElementById('decryptButton').addEventListener('click', decryptMessage);
-    // Add event listeners or logic to shrink the UI back if needed
+    
+
+    let backButtons = document.querySelectorAll('.backButton');
+    backButtons.forEach(button => button.addEventListener('click', function() {
+        showSection('mainMenu');
+        document.body.classList.remove('large-ui'); // Make UI smaller again
+    }));
 });
 
 function showSection(sectionId) {

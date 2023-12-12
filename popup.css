@@ -37,13 +37,22 @@ textarea {
     margin-bottom: 20px;
 }
 
-
 .large-ui {
-    width: 400px; /* Example width, adjust as needed */
-    height: 250px; /* Example height, adjust as needed */
+    width: 400px; 
+    height: 250px; 
 }
 
 /* Styles for the encryption and decryption sections */
 #encryptionSection, #decryptionSection {
+    text-align: left;
+}
+
+
+.backButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 16px;
     text-align: left;
 }
