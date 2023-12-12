@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "CryptoChrome",
+    "version": "1.0",
+    "description": "Encrypt and decrypt messages using public key cryptography.",
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "cryptochrome.png"
+    },
+    "permissions": ["storage"],
+    "host_permissions": ["<all_urls>"]
+}
