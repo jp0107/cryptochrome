@@ -5,14 +5,19 @@
     <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 <body>
-    <div id="encryptionSection">
+    <div id="mainMenu">
+        <button id="showEncrypt">Encryption</button>
+        <button id="showDecrypt">Decryption</button>
+    </div>
+
+    <div id="encryptionSection" class="hidden">
         <h3>Enter Message Here:</h3>
         <textarea id="encryptionInput" placeholder="Enter your message"></textarea>
         <button id="encryptButton">Encrypt</button>
         <p id="encryptedOutput"></p>
     </div>
 
-    <div id="decryptionSection">
+    <div id="decryptionSection" class="hidden">
         <h3>Decode Your Message Here:</h3>
         <textarea id="decryptionInput" placeholder="Paste your coded message"></textarea>
         <button id="decryptButton">Decrypt</button>
