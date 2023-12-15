@@ -56,3 +56,25 @@ textarea {
     font-size: 16px;
     text-align: left;
 }
+
+#keyManagementSection {
+    margin-top: 20px;
+}
+
+#keyManagementSection textarea {
+    width: 95%; /* Adjust as per your layout */
+    height: 60px; /* Adjust height as needed */
+    margin-bottom: 10px;
+}
+
+#encryptedOutput, #decryptedOutput {
+    width: 100%; /* Adjust the width as needed */
+    max-height: 150px; /* Set a maximum height */
+    overflow: auto; /* Enable scrolling if content is too long */
+    word-wrap: break-word; /* Ensure long text wraps */
+    white-space: pre-wrap; /* Preserve formatting and line breaks */
+    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+    padding: 5px;
+    margin-top: 10px;
+    box-sizing: border-box; /* Include padding and border in the width */
+}
