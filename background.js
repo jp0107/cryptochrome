@@ -2,7 +2,7 @@ let publicKey, privateKey;
 
 // Listener for extension installation or startup
 chrome.runtime.onInstalled.addListener(() => {
-    generateKeyPair();
+    generateKeyPairIfNeeded();
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -27,6 +27,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
     return true; // Indicates asynchronous response
 });
+
+function generateKeyPairIfNeeded() {
+    chrome.storage.local.get(["publicKey", "privateKey"], function(items) {
+        if (!items.publicKey || !items.privateKey) {
+            // Keys do not exist, generate new key pair
+            console.log("Generating new key pair...");
+            generateKeyPair();
+        } else {
+            // Keys already exist
+            console.log("Key pair already exists.");
+        }
+    });
+}
 
 function generateKeyPair() {
     return crypto.subtle.generateKey(
@@ -84,17 +97,38 @@ function encryptMessage(message, jwkPublicKey) {
 }
 
 function decryptMessage(encryptedMessage) {
-    let decodedMessage = new Uint8Array(atob(encryptedMessage).split("").map(char => char.charCodeAt(0)));
-    return crypto.subtle.decrypt(
-        { name: "RSA-OAEP" },
-        privateKey,
-        decodedMessage
-    )
-    .then(decrypted => {
-        return new TextDecoder().decode(decrypted);
-    })
-    .catch(error => {
-        console.error("Decryption error:", error);
-        throw error;
+    // Retrieve the private key from storage
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get(["privateKey"], function(items) {
+            if (items.privateKey) {
+                const jwkPrivateKey = items.privateKey;
+                // Import the private key
+                crypto.subtle.importKey(
+                    "jwk", 
+                    jwkPrivateKey,
+                    { name: "RSA-OAEP", hash: { name: "SHA-256" } },
+                    false, // private keys should be non-extractable
+                    ["decrypt"]
+                )
+                .then(importedPrivateKey => {
+                    // Decode the encrypted message and decrypt
+                    let decodedMessage = new Uint8Array(atob(encryptedMessage).split("").map(char => char.charCodeAt(0)));
+                    return crypto.subtle.decrypt(
+                        { name: "RSA-OAEP" },
+                        importedPrivateKey,
+                        decodedMessage
+                    );
+                })
+                .then(decrypted => {
+                    resolve(new TextDecoder().decode(decrypted));
+                })
+                .catch(error => {
+                    console.error("Decryption error:", error);
+                    reject(error);
+                });
+            } else {
+                reject(new Error("Private key not found"));
+            }
+        });
     });
 }
